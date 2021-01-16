@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 # model = torch.hub.load('pytorch/vision:v0.6.0', 'vgg16_bn', pretrained=True)
 # model = torch.hub.load('pytorch/vision:v0.6.0', 'vgg19', pretrained=True)
 # model = torch.hub.load('pytorch/vision:v0.6.0', 'vgg19_bn', pretrained=True)
-model = torch.load('./models/finnetuned_model_100e2.pt')
+model = torch.load('./models/finetuned_model_100e2.pt')
 model.eval()
 
 

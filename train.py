@@ -236,4 +236,4 @@ model_ft, hist = train_model(
     is_inception=(model_name == "inception"),
 )
 
-torch.save(model_ft, "./models/finnetuned_model_100e2.pt")
+torch.save(model_ft, "./models/finetuned_model_100e2.pt")
