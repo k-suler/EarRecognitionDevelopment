@@ -142,7 +142,7 @@ num_classes = 100
 batch_size = 16
 
 # Number of epochs to train for
-num_epochs = 250
+num_epochs = 100
 
 # Flag for feature extracting. When False, we finetune the whole model,
 #   when True we only update the reshaped layer params
@@ -163,7 +163,8 @@ print(model_ft)
 data_transforms = {
     'train': transforms.Compose(
         [
-            transforms.RandomResizedCrop(input_size),
+            transforms.Resize((input_size, input_size)),
+            # transforms.RandomResizedCrop(input_size),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
@@ -171,8 +172,8 @@ data_transforms = {
     ),
     'val': transforms.Compose(
         [
-            transforms.Resize(input_size),
-            transforms.CenterCrop(input_size),
+            transforms.Resize((input_size, input_size)),
+            # transforms.CenterCrop(input_size),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
         ]
@@ -236,4 +237,4 @@ model_ft, hist = train_model(
     is_inception=(model_name == "inception"),
 )
 
-torch.save(model_ft, "./models/finetuned_model_100e2.pt")
+torch.save(model_ft, "./models/finetuned_model_100e4.pt")

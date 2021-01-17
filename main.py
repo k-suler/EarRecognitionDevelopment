@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 # model = torch.hub.load('pytorch/vision:v0.6.0', 'vgg16_bn', pretrained=True)
 # model = torch.hub.load('pytorch/vision:v0.6.0', 'vgg19', pretrained=True)
 # model = torch.hub.load('pytorch/vision:v0.6.0', 'vgg19_bn', pretrained=True)
-model = torch.load('./models/finetuned_model_100e2.pt')
+model = torch.load('./models/finetuned_model_100e4.pt')
 model.eval()
 
 
@@ -36,13 +36,12 @@ def main():
         subject = int(subject)
 
         input_image = Image.open('./' + filename).convert('RGB')
-        import pdb
 
         input_size = 224
         preprocess = transforms.Compose(
             [
-                transforms.Resize(input_size),
-                transforms.CenterCrop(input_size),
+                transforms.Resize((input_size, input_size)),
+                # transforms.CenterCrop(input_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
             ]
@@ -65,19 +64,21 @@ def main():
         # Tensor of shape 1000, with confidence scores over Imagenet's 1000 classes
         # pprint(output[0])
         # The output has unnormalized scores. To get probabilities, you can run a softmax on it.
+
         predictions = torch.nn.functional.softmax(output[0], dim=0)
-        predictions = list(enumerate(output.tolist()[0], 1))
+        predictions = list(enumerate(predictions.tolist(), 1))
         predictions.sort(key=lambda x: x[1], reverse=True)
-        # pdb.set_trace()
         is_found = False
         for t, predicted in enumerate(predictions):
-            if predicted[0] == subject:
+            predicted_id, probability = predicted
+            if predicted_id == subject:
                 is_found = True
                 rank[t] = rank[t] + 1
             elif is_found:
                 rank[t] = rank[t] + 1
 
     rank = list(map(lambda x: x / len(test_files), rank))
+    pprint(rank)
 
     plt.plot(list(range(1, 101)), rank)
     plt.ylabel('Rank - t Identification Rate (%)')
